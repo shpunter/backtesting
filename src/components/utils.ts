@@ -6,7 +6,7 @@ export const CHART_PADDING = 20;
 
 export const CHART_HEIGHT =
   CANDLE_CHART_HEIGHT + VOLUME_CHART_HEIGHT + CHART_PADDING;
-  
+
 export const VOLUME_CHART_Y_START = CANDLE_CHART_HEIGHT + CHART_PADDING;
 
 type ChartDataEntry = {
@@ -17,7 +17,7 @@ type ChartDataEntry = {
   volume: string;
 };
 
-type DataEntries = [string, ChartDataEntry][];
+export type DataEntries = [string, ChartDataEntry][];
 
 export const getChartScales = (dataEntries: DataEntries) => {
   if (dataEntries.length === 0) {
