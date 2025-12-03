@@ -7,7 +7,7 @@ const Candle = ({
   width,
   heightBody,
 }: CandleDataProps) => {
-  const color = type === "buy" ? "green" : "red";
+  const color = type === "buy" ? "red" : "green";
   const titleText =
     type === "buy"
       ? "Bullish candle: Close price higher than Open."

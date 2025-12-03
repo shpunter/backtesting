@@ -1,0 +1,69 @@
+import Candle from "./Candle/Candle";
+import { CANDLE_WIDTH_RATIO, getChartScales } from "../utils";
+
+const CandleChart = ({ data }: CandleChartProps) => {
+  const dataEntries = Object.entries(data);
+  const chartWidth = dataEntries.length * 10;
+  const numCandles = dataEntries.length;
+
+  const { getPixelY } = getChartScales(dataEntries);
+
+  const spacePerCandle = chartWidth / numCandles;
+  const candleWidth = spacePerCandle * CANDLE_WIDTH_RATIO;
+  const gap = (spacePerCandle - candleWidth) / 2;
+
+  return (
+    <>
+      {dataEntries.map(([date, value], index) => {
+        const open = parseFloat(value.open);
+        const close = parseFloat(value.close);
+        const high = parseFloat(value.high);
+        const low = parseFloat(value.low);
+
+        const type = close > open ? "buy" : "sell";
+
+        const xPosition = index * spacePerCandle + gap;
+
+        const yHighPixel = getPixelY(high);
+        const yLowPixel = getPixelY(low);
+        const yOpenPixel = getPixelY(open);
+        const yClosePixel = getPixelY(close);
+
+        const yBodyTop = Math.min(yOpenPixel, yClosePixel);
+        const heightBody = Math.abs(yOpenPixel - yClosePixel);
+
+        const yWickMax = yHighPixel;
+        const yWickMin = yLowPixel;
+
+        const finalHeightBody = heightBody === 0 ? 1 : heightBody;
+
+        return (
+          <Candle
+            key={date}
+            type={type}
+            x={xPosition}
+            width={candleWidth}
+            yBody={yBodyTop}
+            heightBody={finalHeightBody}
+            yWickMax={yWickMax}
+            yWickMin={yWickMin}
+          />
+        );
+      })}
+    </>
+  );
+};
+
+export default CandleChart;
+
+type CandleChartProps = {
+  data: {
+    [date: string]: {
+      open: string;
+      close: string;
+      high: string;
+      low: string;
+      volume: string;
+    };
+  };
+};
