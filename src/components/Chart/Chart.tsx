@@ -1,7 +1,10 @@
 import CandleChart from "../CandleChart/CandleChart";
-import MovingAverageLine from "../MovingAverageLine/MovingAverageLine";
+import EMALine from "../EMALine/EMALine";
+import MACDChart from "../MACDChart/MACDChart";
+import SMALine from "../SMALine/SMALine";
 import { CHART_HEIGHT } from "../utils";
 import VolumeChart from "../VolumeChart/VolumeChart";
+import WMALine from "../WMALine/WMALine";
 
 const Chart = ({ data }: ChartProps) => {
   const dataEntries = Object.entries(data);
@@ -14,10 +17,14 @@ const Chart = ({ data }: ChartProps) => {
       viewBox={`0 0 ${chartWidth} ${CHART_HEIGHT}`}
     >
       <title>t</title>
-      <MovingAverageLine data={data} maPeriod={20} color="green"/>
-      <MovingAverageLine data={data} maPeriod={50} color="red"/>
+      {/* <SMALine data={data} maPeriod={20} color="green"/> */}
+      <WMALine data={data} maPeriod={20} color="red"/>
+      <WMALine data={data} maPeriod={50} color="green"/>
+      {/* <EMALine data={data} maPeriod={20} color="blue"/> */}
+
       <CandleChart data={data} />
       <VolumeChart data={data} />
+      <MACDChart data={data}/>
     </svg>
   );
 };
