@@ -1,10 +1,11 @@
 import { getChartScales } from "../utils";
 
-const MovingAverageLine = ({
+// Simple Moving Average 
+const SMALine = ({
   data,
   maPeriod,
   color,
-}: MovingAverageLineProps) => {
+}: SMALineProps) => {
   const dataEntries = Object.entries(data);
   const closingPrices = dataEntries.map(([, value]) => parseFloat(value.close));
   const maValues: (number | null)[] = [];
@@ -52,7 +53,7 @@ const MovingAverageLine = ({
   );
 };
 
-export default MovingAverageLine;
+export default SMALine;
 
 type ChartDataEntry = {
   open: string;
@@ -62,7 +63,7 @@ type ChartDataEntry = {
   volume: string;
 };
 
-type MovingAverageLineProps = {
+type SMALineProps = {
   data: { [date: string]: ChartDataEntry };
   maPeriod: number;
   color: string;
