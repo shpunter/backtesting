@@ -1,3 +1,5 @@
+import type { DataEntries } from "./type";
+
 export const CANDLE_WIDTH_RATIO = 0.6;
 export const MA_PERIOD = 10;
 export const CANDLE_CHART_HEIGHT = 500;
@@ -12,16 +14,6 @@ export const CHART_HEIGHT =
   CHART_PADDING * 3;
 
 export const VOLUME_CHART_Y_START = CANDLE_CHART_HEIGHT + CHART_PADDING;
-
-type ChartDataEntry = {
-  open: string;
-  close: string;
-  high: string;
-  low: string;
-  volume: string;
-};
-
-export type DataEntries = [string, ChartDataEntry][];
 
 export const getChartScales = (dataEntries: DataEntries) => {
   if (dataEntries.length === 0) {
@@ -57,4 +49,82 @@ export const getChartScales = (dataEntries: DataEntries) => {
   };
 
   return { priceMin, priceMax, priceRange, getPixelY };
+};
+
+export const calculateEMA = (
+  prices: number[],
+  period: number,
+): (number | null)[] => {
+  if (prices.length === 0) return [];
+
+  const alpha = 2 / (period + 1);
+  const emaValues: (number | null)[] = [];
+  let currentEMA: number | null = null;
+
+  for (let i = 0; i < prices.length; i += 1) {
+    const currentPrice = prices[i];
+
+    if (i === 0) {
+      currentEMA = currentPrice;
+    } else if (currentEMA !== null) {
+      currentEMA = currentPrice * alpha + currentEMA * (1 - alpha);
+    }
+
+    emaValues.push(currentEMA);
+  }
+  return emaValues;
+};
+
+export const calculateSMA = (
+  prices: number[],
+  period: number,
+): (number | null)[] => {
+  if (prices.length === 0) return [];
+
+  const smaValues: (number | null)[] = [];
+  const numPrices = prices.length;
+
+  for (let i = 0; i < numPrices; i += 1) {
+    if (i < period - 1) {
+      smaValues.push(null);
+    } else {
+      const slice = prices.slice(i - period + 1, i + 1);
+      const sum = slice.reduce((acc, price) => acc + price, 0);
+      const sma = sum / period;
+
+      smaValues.push(sma);
+    }
+  }
+
+  return smaValues;
+};
+
+export const calculateWMA = (
+  prices: number[],
+  period: number,
+): (number | null)[] => {
+  if (prices.length === 0) return [];
+
+  const wmaValues: (number | null)[] = [];
+  const numCandles = prices.length;
+  const weights = Array.from({ length: period }, (_, i) => i + 1);
+  const sumOfWeights = weights.reduce((sum, weight) => sum + weight, 0);
+
+  for (let i = 0; i < numCandles; i += 1) {
+    if (i < period - 1) {
+      wmaValues.push(null);
+    } else {
+      const slice = prices.slice(i - period + 1, i + 1);
+      let weightedSum = 0;
+
+      for (let j = 0; j < period; j++) {
+        weightedSum += slice[j] * weights[j];
+      }
+
+      const wma = weightedSum / sumOfWeights;
+      wmaValues.push(wma);
+    }
+  }
+
+  return wmaValues;
 };

@@ -1,12 +1,12 @@
 import Candle from "./Candle/Candle";
 import { CANDLE_WIDTH_RATIO, getChartScales } from "../utils";
+import type { ChartDataEntry } from "../type";
 
 const CandleChart = ({ data }: CandleChartProps) => {
-  const dataEntries = Object.entries(data);
-  const chartWidth = dataEntries.length * 10;
-  const numCandles = dataEntries.length;
+  const chartWidth = data.length * 10;
+  const numCandles = data.length;
 
-  const { getPixelY } = getChartScales(dataEntries);
+  const { getPixelY } = getChartScales(data);
 
   const spacePerCandle = chartWidth / numCandles;
   const candleWidth = spacePerCandle * CANDLE_WIDTH_RATIO;
@@ -14,7 +14,7 @@ const CandleChart = ({ data }: CandleChartProps) => {
 
   return (
     <>
-      {dataEntries.map(([date, value], index) => {
+      {data.map(([date, value], index) => {
         const open = parseFloat(value.open);
         const close = parseFloat(value.close);
         const high = parseFloat(value.high);
@@ -57,13 +57,5 @@ const CandleChart = ({ data }: CandleChartProps) => {
 export default CandleChart;
 
 type CandleChartProps = {
-  data: {
-    [date: string]: {
-      open: string;
-      close: string;
-      high: string;
-      low: string;
-      volume: string;
-    };
-  };
+  data: [string, ChartDataEntry][];
 };
