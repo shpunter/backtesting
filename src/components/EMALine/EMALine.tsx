@@ -1,41 +1,28 @@
-import type { MALineProps } from "../type";
-import { getChartScales } from "../utils";
+import { calculateEMA, getChartScales } from "../utils";
 
-// Exponential Moving Average 
-const EMALine = ({ data, maPeriod, color }: MALineProps) => {
-  const dataEntries = Object.entries(data);
-  const closingPrices = dataEntries.map(([, value]) => parseFloat(value.close));
-  const emaValues: number[] = [];
-  const numCandles = dataEntries.length;
+import type { ChartDataEntry } from "../type";
+
+// Exponential Moving Average
+const EMALine = ({ data, maPeriod, color }: EMALineProps) => {
+  const closingPrices = data.map(([, value]) => parseFloat(value.close));
+  const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;
+  const emaValues = calculateEMA(closingPrices, maPeriod);
 
-  const { getPixelY } = getChartScales(dataEntries);
-
-  const alpha = 2 / (maPeriod + 1);
-  let currentEMA: number | null = null;
-
-  for (let i = 0; i < numCandles; i += 1) {
-    const currentPrice = closingPrices[i];
-
-    if (i === 0) {
-      currentEMA = currentPrice;
-    } else if (currentEMA !== null) {
-      currentEMA = currentPrice * alpha + currentEMA * (1 - alpha);
-    }
-
-    if (currentEMA !== null) {
-      emaValues.push(currentEMA);
-    }
-  }
+  const { getPixelY } = getChartScales(data);
 
   const exponentialMovingAveragePoints = emaValues
     .map((ema, index) => {
-      const xPosition = index * spacePerCandle + spacePerCandle / 2;
-      const yPosition = getPixelY(ema);
+      if (ema !== null) {
+        const xPosition = index * spacePerCandle + spacePerCandle / 2;
+        const yPosition = getPixelY(ema);
 
-      return `${xPosition},${yPosition}`;
+        return `${xPosition},${yPosition}`;
+      }
+      return null;
     })
+    .filter((point): point is string => point !== null) 
     .join(" ");
 
   if (exponentialMovingAveragePoints.length === 0) {
@@ -53,3 +40,9 @@ const EMALine = ({ data, maPeriod, color }: MALineProps) => {
 };
 
 export default EMALine;
+
+export type EMALineProps = {
+  data: [string, ChartDataEntry][];
+  maPeriod: number;
+  color: string;
+};

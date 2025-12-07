@@ -19,7 +19,5 @@ export const Route = createFileRoute("/fake/data")({
 function RouteComponent() {
   const resp = Route.useLoaderData();
 
-  console.log(resp.data)
-
-  return <Chart data={resp.data} />;
+  return <Chart data={Object.entries(resp.data)} />;
 }

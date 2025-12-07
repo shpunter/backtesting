@@ -1,40 +1,13 @@
-import type { ChartDataEntry } from "../type";
 import {
+  calculateEMA,
   CANDLE_CHART_HEIGHT,
+  CANDLE_WIDTH_RATIO,
   CHART_PADDING,
   MACD_CHART_HEIGHT,
   VOLUME_CHART_HEIGHT,
 } from "../utils";
 
-const CANDLE_WIDTH_RATIO = 0.8;
-
-type MACDChartProps = {
-  data: { [date: string]: ChartDataEntry };
-  fastPeriod?: number; // Default 12
-  slowPeriod?: number; // Default 26
-  signalPeriod?: number; // Default 9
-};
-
-const calculateEMA = (prices: number[], period: number): (number | null)[] => {
-  if (prices.length === 0) return [];
-
-  const alpha = 2 / (period + 1);
-  const emaValues: (number | null)[] = [];
-  let currentEMA: number | null = null;
-
-  for (let i = 0; i < prices.length; i += 1) {
-    const currentPrice = prices[i];
-
-    if (i === 0) {
-      currentEMA = currentPrice;
-    } else if (currentEMA !== null) {
-      currentEMA = currentPrice * alpha + currentEMA * (1 - alpha);
-    }
-
-    emaValues.push(currentEMA);
-  }
-  return emaValues;
-};
+import type { ChartDataEntry } from "../type";
 
 const MACDChart = ({
   data,
@@ -42,19 +15,18 @@ const MACDChart = ({
   slowPeriod = 26,
   signalPeriod = 9,
 }: MACDChartProps) => {
-  const dataEntries = Object.entries(data);
-  const numCandles = dataEntries.length;
+  const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;
-
-  const closingPrices = dataEntries.map(([, value]) => parseFloat(value.close));
-
+  const closingPrices = data.map(([, value]) => parseFloat(value.close));
   const fastEMA = calculateEMA(closingPrices, fastPeriod);
   const slowEMA = calculateEMA(closingPrices, slowPeriod);
 
-  const macdLineValues = fastEMA.map((f, i) =>
-    f !== null && slowEMA[i] !== null ? f - (slowEMA[i] as number) : null,
-  );
+  const macdLineValues = fastEMA.map((macd, i) => {
+    if (macd === null || slowEMA[i] === null) return null;
+
+    return macd - slowEMA[i];
+  });
 
   const validMacdValues = macdLineValues.filter((v): v is number => v !== null);
   const signalLineValuesPartial = calculateEMA(validMacdValues, signalPeriod);
@@ -65,11 +37,11 @@ const MACDChart = ({
     .fill(null)
     .concat(signalLineValuesPartial);
 
-  const histogramValues = macdLineValues.map((macd, i) =>
-    macd !== null && signalLineValues[i] !== null
-      ? macd - (signalLineValues[i] as number)
-      : null,
-  );
+  const histogramValues = macdLineValues.map((macd, i) => {
+    if (macd === null || signalLineValues[i] === null) return null;
+
+    return macd - signalLineValues[i];
+  });
 
   const macdAndSignalValues = macdLineValues
     .concat(signalLineValues)
@@ -178,3 +150,10 @@ const MACDChart = ({
 };
 
 export default MACDChart;
+
+type MACDChartProps = {
+  data: [string, ChartDataEntry][];
+  fastPeriod?: number; // Default 12
+  slowPeriod?: number; // Default 26
+  signalPeriod?: number; // Default 9
+};

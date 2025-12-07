@@ -1,35 +1,16 @@
-import type { MALineProps } from "../type";
-import { getChartScales } from "../utils";
+import { calculateWMA, getChartScales } from "../utils";
 
-// Weighted Moving Average 
+import type { ChartDataEntry } from "../type";
+
+// Weighted Moving Average
 const WMALine = ({ data, maPeriod, color }: MALineProps) => {
-  const dataEntries = Object.entries(data);
-  const closingPrices = dataEntries.map(([, value]) => parseFloat(value.close));
-  const wmaValues: (number | null)[] = [];
-  const numCandles = dataEntries.length;
+  const closingPrices = data.map(([, value]) => parseFloat(value.close));
+  const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;
+  const wmaValues = calculateWMA(closingPrices, maPeriod);
 
-  const { getPixelY } = getChartScales(dataEntries);
-
-  const weights = Array.from({ length: maPeriod }, (_, i) => i + 1);
-  const sumOfWeights = weights.reduce((sum, weight) => sum + weight, 0);
-
-  for (let i = 0; i < numCandles; i += 1) {
-    if (i < maPeriod - 1) {
-      wmaValues.push(null);
-    } else {
-      const slice = closingPrices.slice(i - maPeriod + 1, i + 1);
-      let weightedSum = 0;
-
-      for (let j = 0; j < maPeriod; j++) {
-        weightedSum += slice[j] * (j + 1);
-      }
-
-      const wma = weightedSum / sumOfWeights;
-      wmaValues.push(wma);
-    }
-  }
+  const { getPixelY } = getChartScales(data);
 
   const weightedMovingAveragePoints = wmaValues
     .map((wma, index) => {
@@ -58,3 +39,9 @@ const WMALine = ({ data, maPeriod, color }: MALineProps) => {
 };
 
 export default WMALine;
+
+export type MALineProps = {
+  data: [string, ChartDataEntry][];
+  maPeriod: number;
+  color: string;
+};
