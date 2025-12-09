@@ -1,14 +1,13 @@
-import { calculateWMA, getChartScales } from "../utils";
-
-import type { ChartDataEntry } from "../type";
+import { calculateWMA, getChartScales } from "@/components/utils";
+import type { ChartDataEntry } from "@/components/type";
 
 // Weighted Moving Average
-const WMALine = ({ data, maPeriod, color }: MALineProps) => {
+const WMALine = ({ data, period, color }: MALineProps) => {
   const closingPrices = data.map(([, value]) => parseFloat(value.close));
   const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;
-  const wmaValues = calculateWMA(closingPrices, maPeriod);
+  const wmaValues = calculateWMA(closingPrices, period);
 
   const { getPixelY } = getChartScales(data);
 
@@ -42,6 +41,6 @@ export default WMALine;
 
 export type MALineProps = {
   data: [string, ChartDataEntry][];
-  maPeriod: number;
+  period: number;
   color: string;
 };

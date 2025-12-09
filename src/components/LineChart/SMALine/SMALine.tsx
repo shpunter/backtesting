@@ -1,17 +1,15 @@
-import { calculateSMA, getChartScales } from "../utils";
-
-import type { ChartDataEntry } from "../type";
+import { calculateSMA, getChartScales } from "@/components/utils";
+import type{ ChartDataEntry } from "@/components/type";
 
 // Simple Moving Average
-const SMALine = ({ data, maPeriod, color }: SMALineProps) => {
-  const dataEntries = Object.entries(data);
-  const closingPrices = dataEntries.map(([, value]) => parseFloat(value.close));
-  const numCandles = dataEntries.length;
+const SMALine = ({ data, period, color }: SMALineProps) => {
+  const closingPrices = data.map(([, value]) => parseFloat(value.close));
+  const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;
-  const maValues = calculateSMA(closingPrices, maPeriod);
+  const maValues = calculateSMA(closingPrices, period);
   
-  const { getPixelY } = getChartScales(dataEntries);
+  const { getPixelY } = getChartScales(data);
 
   const movingAveragePoints = maValues
     .map((ma, index) => {
@@ -42,7 +40,7 @@ const SMALine = ({ data, maPeriod, color }: SMALineProps) => {
 export default SMALine;
 
 type SMALineProps = {
-  data: { [date: string]: ChartDataEntry };
-  maPeriod: number;
+  data: [string, ChartDataEntry][];
+  period: number;
   color: string;
 };
