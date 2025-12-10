@@ -1,12 +1,26 @@
 import { create } from "zustand";
 
-// const useChartStore = create<State & Actions>((set) => {
-const useChartStore = create<State>(() => {
+const useChartStore = create<State & Actions>((set) => {
   return {
-    linesMA: [
-      { uuid: crypto.randomUUID(), type: "sma", period: 9, color: "red" },
-      { uuid: crypto.randomUUID(), type: "sma", period: 20, color: "green" },
-    ],
+    linesMA: [],
+    addLineMA: ({ type, period, color }) => {
+      return set((state) => ({
+        linesMA: [
+          ...state.linesMA,
+          {
+            uuid: crypto.randomUUID(),
+            type,
+            period,
+            color,
+          },
+        ],
+      }));
+    },
+    resetLinesMA: () => {
+      return set(() => ({
+        linesMA: [],
+      }));
+    },
   };
 });
 
@@ -16,9 +30,18 @@ export type State = {
   linesMA: LinesMA[];
 };
 
-// export type Actions = {};
+export type Actions = {
+  addLineMA: (attr: AddLineMAAttr) => void;
+  resetLinesMA: () => void;
+};
 
-type LinesMA = {
+type AddLineMAAttr = {
+  type: LinesMA["type"];
+  period: LinesMA["period"];
+  color: LinesMA["color"];
+};
+
+export type LinesMA = {
   uuid: string;
   type: "sma" | "ema" | "wma";
   period: number;
