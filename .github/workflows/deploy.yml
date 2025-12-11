@@ -38,7 +38,7 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "backtesting"
-          entrypoint: "./index.mjs"
-          root: "/.output/server"
+          entrypoint: "./server/index.mjs"
+          root: "./.output"
           
           
