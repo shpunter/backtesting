@@ -38,8 +38,11 @@ jobs:
 
       - name: Upload to Deno Deploy
         run: |
-          deployctl deploy . \
+          deno install -A -f -g jsr:@deno/deployctl
+          export PATH="$HOME/.deno/bin:$PATH"
+
+          deployctl deploy .output/ \
             --project=shpunter-backtesting \
-            --entrypoint=.output/server/index.ts
+            --entrypoint=server/index.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
