@@ -39,6 +39,6 @@ jobs:
       - name: Upload to Deno Deploy
         run: |
           deno install -A -f -g jsr:@deno/deployctl
-          deployctl deploy index.mjs
+          deployctl deploy .output/server/index.mjs
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
