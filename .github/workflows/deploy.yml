@@ -36,12 +36,13 @@ jobs:
         env:
           NITRO_PRESET: deno_deploy
 
-      - name: Upload to Deno Deploy (CLI Fix)
+      - name: Upload to Deno Deploy
         run: |
           deno install -A -f -g jsr:@deno/deployctl
+          cd .output
           deployctl deploy \
             --project "backtesting" \
-            --root ".output" \
+            --include "public" \
             server/index.mjs
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
