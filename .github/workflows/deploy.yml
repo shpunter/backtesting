@@ -39,6 +39,6 @@ jobs:
       - name: Upload to Deno Deploy
         run: |
           deno install -A -f -g jsr:@deno/deployctl
-          deployctl deploy .output/server/index.ts --project=backtesting
+          deployctl deploy .output/server/index.ts --project=back-testing
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
