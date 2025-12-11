@@ -39,7 +39,7 @@ jobs:
       - name: Upload to Deno Deploy (CLI Fix)
         run: |
           cd .output
-          deno install -A -f jsr:@deno/deployctl
+          deno install -A -f -g jsr:@deno/deployctl
           deployctl deploy --project "backtesting" server/index.mjs
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
