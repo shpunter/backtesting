@@ -41,9 +41,13 @@ jobs:
           deno install -A -f -g jsr:@deno/deployctl
           export PATH="$HOME/.deno/bin:$PATH"
 
-          /home/runner/.deno/bin/deployctl deploy .output/server/index.ts \
-            --project=shpunter-backtesting \
-            --include=./.output/public \
-            --include=./.output/nitro.json
+          cp .output/server/index.ts ./server.ts # Copy server file to root
+          cp -r .output/public/* ./ # Copy contents of public into root
+
+          deployctl deploy ./server.ts \
+            --project=shpunter-backtesting 
+
+          rm ./server.ts
+          rm -rf ./assets # Remove copied public assets
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
