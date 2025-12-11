@@ -38,16 +38,27 @@ jobs:
 
       - name: Upload to Deno Deploy
         run: |
+          # 1. Setup
           deno install -A -f -g jsr:@deno/deployctl
           export PATH="$HOME/.deno/bin:$PATH"
 
-          cp .output/server/index.ts ./server.ts # Copy server file to root
-          cp -r .output/public/* ./ # Copy contents of public into root
+          # 2. Flatten the Build Output into the Repository Root
+          # This makes the server file and static assets visible at the top level.
 
+          # Copy server entrypoint to the root (renamed for clarity)
+          cp .output/server/index.ts ./server.ts 
+
+          # Copy contents of the public folder into the root (assets, favicon, etc.)
+          cp -r .output/public/* ./
+
+          # 3. Deploy the temporary file (server.ts) from the root
+          # This deployment now includes all static assets copied to the root directory
           deployctl deploy ./server.ts \
             --project=back-testing 
 
+          # 4. Clean up (Optional, but good practice)
           rm ./server.ts
-          rm -rf ./assets # Remove copied public assets
+          rm -rf ./assets # Remove copied assets folder from root
+          rm ./favicon.ico # Remove other copied files from public
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
