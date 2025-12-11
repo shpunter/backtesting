@@ -34,6 +34,9 @@ jobs:
       - name: Build step
         run: "NITRO_PRESET=deno_deploy && npm run build"
 
+      - name: Change Directory for Deploy
+        run: cd .output && ls -a
+
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
