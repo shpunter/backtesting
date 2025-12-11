@@ -39,7 +39,10 @@ jobs:
       - name: Upload to Deno Deploy
         run: |
           deno install -A -f -g jsr:@deno/deployctl
-          /home/runner/.deno/bin/deployctl deploy . \
+          
+          export PATH="$HOME/.deno/bin:$PATH"
+          
+          deployctl deploy . \
             --project=shpunter-backtesting \
             --entrypoint=.output/server/index.ts
         env:
