@@ -33,8 +33,6 @@ jobs:
 
       - name: Build step
         run: npm run server:build
-        env:
-          NITRO_PRESET: deno_deploy
 
       - name: Upload to Deno Deploy
         run: |
@@ -42,12 +40,23 @@ jobs:
           deno install -A -f -g jsr:@deno/deployctl
           export PATH="$HOME/.deno/bin:$PATH"
 
-          # 2. Deploy the server entrypoint file, explicitly including the public folder.
-          # We use the explicit path and includes, which is the necessary configuration 
-          # for a Deno-built Nitro application.
-          /home/runner/.deno/bin/deployctl deploy .output/server/index.ts \
+          # 2. FLATTEN THE BUILD OUTPUT (The only reliable method left)
+          
+          # Copy server entrypoint to the root (renamed for clarity)
+          cp .output/server/index.ts ./server.ts 
+          
+          # Copy contents of the public folder (assets, favicon, etc.) into the root
+          # This ensures static assets are bundled alongside the server file.
+          cp -r .output/public/* ./
+          
+          # 3. Deploy the single server file from the root
+          deployctl deploy ./server.ts \
             --project=shpunter-backtesting \
-            --include=./.output/public \
-            --include=./.output/nitro.json
+            --token=${{ secrets.DENO_DEPLOY_TOKEN }}
+          
+          # 4. Cleanup (Best practice)
+          rm ./server.ts
+          rm -rf ./assets 
+          rm -f ./favicon.ico
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
