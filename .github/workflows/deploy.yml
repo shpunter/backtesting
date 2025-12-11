@@ -38,10 +38,8 @@ jobs:
 
       - name: Upload to Deno Deploy
         run: |
-          deno install -A -f -g jsr:@deno/deployctl
-          deployctl deploy .output/server/index.ts \
-            --project=shpunter-backtesting \
-            --include=./.output/public \
-            --include=./.output/nitro.json
+          deployctl deploy . \
+            --project=back-testing \
+            --entrypoint=.output/server/index.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
