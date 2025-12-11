@@ -42,8 +42,8 @@ jobs:
           
           export PATH="$HOME/.deno/bin:$PATH"
           
-          deployctl deploy . \
+          deployctl deploy .output \
             --project=shpunter-backtesting \
-            --entrypoint=.output/server/index.ts
+            --entrypoint=server/index.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
