@@ -41,8 +41,19 @@ jobs:
           deno install -A -f -g jsr:@deno/deployctl
           export PATH="$HOME/.deno/bin:$PATH"
 
-          deployctl deploy .output/ \
+          TEMP_DEPLOY_DIR=".deploy"
+
+          rm -rf $TEMP_DEPLOY_DIR
+          mkdir $TEMP_DEPLOY_DIR
+
+          cp .output/server/index.ts $TEMP_DEPLOY_DIR/server.ts
+          cp -r .output/public/* $TEMP_DEPLOY_DIR/
+
+          cd $TEMP_DEPLOY_DIR
+
+          # The entrypoint path is now simply 'server.ts'
+          deployctl deploy . \
             --project=shpunter-backtesting \
-            --entrypoint=server/index.ts
+            --entrypoint=server.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
