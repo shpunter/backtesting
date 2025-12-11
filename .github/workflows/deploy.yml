@@ -39,6 +39,6 @@ jobs:
         with:
           project: "backtesting"
           entrypoint: "./server/index.mjs"
-          root: "./.output"
+          root: ".output"
           
           
