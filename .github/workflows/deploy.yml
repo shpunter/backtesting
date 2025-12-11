@@ -40,6 +40,6 @@ jobs:
         run: |
           cd .output
           deno install -A -f -g jsr:@deno/deployctl
-          deployctl deploy --project "backtesting" server/index.mjs
+          deployctl deploy --project "backtesting" .output/server/index.mjs
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
