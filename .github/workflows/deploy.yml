@@ -41,19 +41,9 @@ jobs:
           deno install -A -f -g jsr:@deno/deployctl
           export PATH="$HOME/.deno/bin:$PATH"
 
-          TEMP_DEPLOY_DIR=".deploy"
-
-          rm -rf $TEMP_DEPLOY_DIR
-          mkdir $TEMP_DEPLOY_DIR
-
-          cp .output/server/index.ts $TEMP_DEPLOY_DIR/server.ts
-
-          cp -r .output/public $TEMP_DEPLOY_DIR/ 
-
-          cd $TEMP_DEPLOY_DIR
-
-          deployctl deploy . \
+          /home/runner/.deno/bin/deployctl deploy .output/server/index.ts \
             --project=shpunter-backtesting \
-            --entrypoint=server.ts
+            --include=./.output/public \
+            --include=./.output/nitro.json
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
