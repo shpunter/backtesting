@@ -40,6 +40,6 @@ jobs:
         run: |
           deno install -A -f -g jsr:@deno/deployctl
           cd .output
-          deployctl deploy .output --project=back-testing --entrypoint=server/index.ts
+          deployctl deploy . --project=back-testing --entrypoint=server/index.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
