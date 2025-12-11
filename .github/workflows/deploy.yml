@@ -32,33 +32,34 @@ jobs:
         run: "npm install"
 
       - name: Build step
-        run: npx nitro build 
+        run: npm run build
         env:
           NITRO_PRESET: deno_deploy
 
       - name: Upload to Deno Deploy
         run: |
-          # 1. Setup
+          # 1. Install deployctl and add its binary to the shell's PATH
           deno install -A -f -g jsr:@deno/deployctl
           export PATH="$HOME/.deno/bin:$PATH"
 
-          # 2. Flatten the Build Output into the Repository Root
-          # This makes the server file and static assets visible at the top level.
-
-          # Copy server entrypoint to the root (renamed for clarity)
+          # 2. FLATTEN THE BUILD OUTPUT INTO THE REPOSITORY ROOT
+          # This creates a simple, deployable structure at the root (./).
+          
+          # Copy server entrypoint to the root (renamed for a clean entrypoint)
           cp .output/server/index.ts ./server.ts 
-
-          # Copy contents of the public folder into the root (assets, favicon, etc.)
+          
+          # Copy contents of the public folder (assets, favicon, etc.) into the root
+          # This ensures static assets are bundled alongside the server file.
           cp -r .output/public/* ./
-
-          # 3. Deploy the temporary file (server.ts) from the root
-          # This deployment now includes all static assets copied to the root directory
+          
+          # 3. Deploy the single server file from the root
+          # This bypasses all Deno Deploy path nesting issues (like /src/.output).
           deployctl deploy ./server.ts \
-            --project=back-testing 
-
-          # 4. Clean up (Optional, but good practice)
+            --project=shpunter-backtesting \
+            --token=${{ secrets.DENO_DEPLOY_TOKEN }}
+          
+          # 4. Cleanup (Best practice to remove temporary files)
           rm ./server.ts
-          rm -rf ./assets # Remove copied assets folder from root
-          rm ./favicon.ico # Remove other copied files from public
-        env:
-          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+          rm -rf ./assets 
+          rm -f ./favicon.ico # Use rm -f for files that might be in the root
+          # You may need to add more rm commands here if other files were copied from 'public'
