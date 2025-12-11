@@ -32,24 +32,14 @@ jobs:
         run: "npm install"
 
       - name: Build step
-        run: npm run build
+        run: npx nitro build 
         env:
           NITRO_PRESET: deno_deploy
 
       - name: Upload to Deno Deploy
         run: |
-          deno install -A -f -g jsr:@deno/deployctl
-          export PATH="$HOME/.deno/bin:$PATH"
-
-          TEMP_DEPLOY_DIR=".deploy"
-          mkdir $TEMP_DEPLOY_DIR
-          cp .output/server/index.ts $TEMP_DEPLOY_DIR/server.ts
-          cp -r .output/public $TEMP_DEPLOY_DIR/public
-
-          cd $TEMP_DEPLOY_DIR
-
           deployctl deploy . \
             --project=shpunter-backtesting \
-            --entrypoint=server.ts
+            --entrypoint=.output/server/index.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
