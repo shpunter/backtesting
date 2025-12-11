@@ -36,20 +36,12 @@ jobs:
         env:
           NITRO_PRESET: deno_deploy
 
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: deno-deploy-output
-          path: ./.output/
-          
       - name: Upload to Deno Deploy
         run: |
           deno install -A -f -g jsr:@deno/deployctl
-          cd .output
           deployctl deploy \
             --project "backtesting" \
-            --include "public" \
-            --root ".output" \
-            server/index.mjs
+            --include ".output/public" \
+            .output/server/index.mjs
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
