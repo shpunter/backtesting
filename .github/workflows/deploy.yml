@@ -42,7 +42,7 @@ jobs:
           deployctl deploy \
             --project "backtesting" \
             --include ".output/public" \
-            --root "./.output" \
-            ./server/index.mjs
+            --root ".output" \
+            server/index.mjs
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
