@@ -32,7 +32,7 @@ jobs:
         run: "npm install"
 
       - name: Build step
-        run: npm run build
+        run: npx nitro build
         env:
           NITRO_PRESET: deno_deploy
 
@@ -45,9 +45,9 @@ jobs:
           # 2. Deploy the server entrypoint file, explicitly including the public folder.
           # This tells deployctl to use index.ts as the entrypoint and to bundle 
           # the entire .output/public directory contents alongside it.
-          /home/runner/.deno/bin/deployctl deploy .output/server/index.mjs \
+          /home/runner/.deno/bin/deployctl deploy .output/server/index.ts \
             --project=shpunter-backtesting \
             --include=./.output/public \
-            --include=./.output/nitro.json # Including nitro.json for good measure
+            --include=./.output/nitro.json
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
