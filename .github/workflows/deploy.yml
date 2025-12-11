@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write # Needed for auth with Deno Deploy
-      contents: read # Needed to clone the repository
+      id-token: write
+      contents: read
 
     steps:
       - name: Clone repository
@@ -36,15 +36,10 @@ jobs:
         env:
           NITRO_PRESET: deno_deploy
 
-      - name: Change Directory for Deploy
-        run: cd .output && ls -a
-
-      - name: Upload to Deno Deploy
-        uses: denoland/deployctl@v1
-        with:
-          project: "backtesting"
-          entrypoint: "server/index.mjs"
-          root: ".output"
-          working-directory: ./.output
-          
-          
+      - name: Upload to Deno Deploy (CLI Fix)
+        run: |
+          cd .output
+          deno install -A -f jsr:@deno/deployctl
+          deployctl deploy --project "backtesting" server/index.mjs
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
