@@ -38,8 +38,8 @@ jobs:
 
       - name: Upload to Deno Deploy
         run: |
-          deployctl deploy . \
-            --project=back-testing \
+          /home/runner/.deno/bin/deployctl deploy . \
+            --project=shpunter-backtesting \
             --entrypoint=.output/server/index.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
