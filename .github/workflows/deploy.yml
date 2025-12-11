@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write
-      contents: read
+      id-token: write # Needed for auth with Deno Deploy
+      contents: read # Needed to clone the repository
 
     steps:
       - name: Clone repository
@@ -32,31 +32,13 @@ jobs:
         run: "npm install"
 
       - name: Build step
-        run: npm run server:build
+        run: "npm run server:build"
 
       - name: Upload to Deno Deploy
-        run: |
-          # 1. Setup
-          deno install -A -f -g jsr:@deno/deployctl
-          export PATH="$HOME/.deno/bin:$PATH"
-
-          # 2. FLATTEN THE BUILD OUTPUT INTO THE REPOSITORY ROOT
-          # This ensures the server file and static assets are at the top level (./)
+        uses: denoland/deployctl@v1
+        with:
+          project: "oleksandrbr-backtesting-96"
+          entrypoint: ".output/server/index.ts"
+          root: "."
+          include: .output/public/*
           
-          # Copy server entrypoint to the root (renamed for clarity)
-          cp .output/server/index.ts ./server.ts 
-          
-          # Copy contents of the public folder (all assets) into the root
-          cp -r .output/public/* ./
-          
-          # 3. Deploy the single server file from the root
-          # This simple path bypasses all nested directory conflicts (e.g., /src/.output).
-          deployctl deploy ./server.ts \
-            --project=shpunter-backtesting
-          
-          # 4. Cleanup (Always necessary)
-          rm ./server.ts
-          rm -rf ./assets 
-          rm -f ./favicon.ico
-        env:
-          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
