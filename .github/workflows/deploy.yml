@@ -32,7 +32,9 @@ jobs:
         run: "npm install"
 
       - name: Build step
-        run: "NITRO_PRESET=deno_deploy && npm run build"
+        run: npm run build
+        env:
+          NITRO_PRESET: deno_deploy
 
       - name: Change Directory for Deploy
         run: cd .output && ls -a
