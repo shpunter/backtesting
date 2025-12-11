@@ -43,12 +43,12 @@ jobs:
 
           TEMP_DEPLOY_DIR=".deploy"
           mkdir $TEMP_DEPLOY_DIR
-
           cp .output/server/index.ts $TEMP_DEPLOY_DIR/server.ts
-
           cp -r .output/public $TEMP_DEPLOY_DIR/public
 
-          deployctl deploy $TEMP_DEPLOY_DIR \
+          cd $TEMP_DEPLOY_DIR
+
+          deployctl deploy . \
             --project=shpunter-backtesting \
             --entrypoint=server.ts
         env:
