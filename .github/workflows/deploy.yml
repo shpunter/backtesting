@@ -45,7 +45,7 @@ jobs:
           cp -r .output/public/* ./ # Copy contents of public into root
 
           deployctl deploy ./server.ts \
-            --project=shpunter-backtesting 
+            --project=back-testing 
 
           rm ./server.ts
           rm -rf ./assets # Remove copied public assets
