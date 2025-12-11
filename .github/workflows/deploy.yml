@@ -40,21 +40,21 @@ jobs:
           deno install -A -f -g jsr:@deno/deployctl
           export PATH="$HOME/.deno/bin:$PATH"
 
-          # 2. FLATTEN THE BUILD OUTPUT (The only reliable method left)
+          # 2. FLATTEN THE BUILD OUTPUT INTO THE REPOSITORY ROOT
+          # This ensures the server file and static assets are at the top level (./)
           
           # Copy server entrypoint to the root (renamed for clarity)
           cp .output/server/index.ts ./server.ts 
           
-          # Copy contents of the public folder (assets, favicon, etc.) into the root
-          # This ensures static assets are bundled alongside the server file.
+          # Copy contents of the public folder (all assets) into the root
           cp -r .output/public/* ./
           
           # 3. Deploy the single server file from the root
+          # This simple path bypasses all nested directory conflicts (e.g., /src/.output).
           deployctl deploy ./server.ts \
-            --project=shpunter-backtesting \
-            --token=${{ secrets.DENO_DEPLOY_TOKEN }}
+            --project=shpunter-backtesting
           
-          # 4. Cleanup (Best practice)
+          # 4. Cleanup (Always necessary)
           rm ./server.ts
           rm -rf ./assets 
           rm -f ./favicon.ico
