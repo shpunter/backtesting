@@ -35,22 +35,10 @@ jobs:
         run: npm run build
         env:
           NITRO_PRESET: deno_deploy
-      - name: Verify Build Output 🔎
-        run: |
-          echo "Listing contents of .output directory:"
-          ls -R .output/
-          
-          # Check for the specific file
-          if [ -f .output/server/index.mjs ]; then
-            echo "✅ .output/server/index.mjs was found."
-          else
-            echo "❌ .output/server/index.mjs was NOT found. Check your build command and NITRO_PRESET."
-            exit 1 # Fail the job if the file is missing
-          fi
 
       - name: Upload to Deno Deploy
         run: |
           deno install -A -f -g jsr:@deno/deployctl
-          deployctl deploy .output/server/index.mjs
+          deployctl deploy .output/server/index.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}

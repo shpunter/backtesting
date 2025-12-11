@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "build": "vite build",
+    "server:build": "NITRO_PRESET=deno_deploy npx nitro build",
     "serve": "vite preview",
     "test": "vitest run",
     "format": "biome format",
