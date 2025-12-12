@@ -1,6 +1,6 @@
 import type { DataEntries } from "./type";
 
-export const CANDLE_WIDTH_RATIO = 0.8;
+export const CANDLE_WIDTH_RATIO = 0.7;
 export const CANDLE_CHART_HEIGHT = 500;
 export const VOLUME_CHART_HEIGHT = 100;
 export const MACD_CHART_HEIGHT = 100;
