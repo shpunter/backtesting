@@ -23,7 +23,7 @@ const config: UserConfigFn = ({ mode }: ConfigEnv) => {
       !isTest && tailwindcss(),
       tanstackStart(),
       viteReact(),
-      cloudflare({ viteEnvironment: { name: 'ssr' } }),
+      !isTest && cloudflare({ viteEnvironment: { name: 'ssr' } }),
     ].filter(Boolean) as PluginOption[], 
     
     server: {
