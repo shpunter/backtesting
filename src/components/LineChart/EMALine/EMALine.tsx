@@ -21,7 +21,7 @@ const EMALine = ({ data, period, color }: EMALineProps) => {
       }
       return null;
     })
-    .filter((point): point is string => point !== null) 
+    .filter((point) => point !== null) 
     .join(" ");
 
   if (exponentialMovingAveragePoints.length === 0) {

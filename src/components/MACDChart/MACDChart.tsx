@@ -28,27 +28,41 @@ const MACDChart = ({
     return macd - slowEMA[i];
   });
 
-  const validMacdValues = macdLineValues.filter((v): v is number => v !== null);
+  const validMacdValues = macdLineValues.filter((value) => value !== null);
   const signalLineValuesPartial = calculateEMA(validMacdValues, signalPeriod);
 
-  const signalLineValues = Array(
+  const signalLineValues = Array<number | null>(
     macdLineValues.length - signalLineValuesPartial.length,
   )
     .fill(null)
     .concat(signalLineValuesPartial);
 
   const histogramValues = macdLineValues.map((macd, i) => {
-    if (macd === null || signalLineValues[i] === null) return null;
+    const signal = signalLineValues[i];
 
-    return macd - signalLineValues[i];
+    if (macd === null || signal === null) return null;
+
+    return macd - signal;
   });
 
-  const macdAndSignalValues = macdLineValues
-    .concat(signalLineValues)
-    .filter((v): v is number => v !== null);
+  let maxMacd = 0;
+  let minMacd = 0;
 
-  const maxMacd = macdAndSignalValues.reduce((max, v) => Math.max(max, v), 0);
-  const minMacd = macdAndSignalValues.reduce((min, v) => Math.min(min, v), 0);
+  for (let i = 0; i < macdLineValues.length; i++) {
+    const macd = macdLineValues[i];
+    const signal = signalLineValues[i];
+
+    if (macd !== null) {
+      if (maxMacd < macd) maxMacd = macd;
+      if (minMacd > macd) minMacd = macd;
+    }
+
+    if (signal !== null) {
+      if (maxMacd < signal) maxMacd = signal;
+      if (minMacd > signal) minMacd = signal;
+    }
+  }
+
   const maxAbsValue = Math.max(Math.abs(maxMacd), Math.abs(minMacd));
 
   if (maxAbsValue === 0) {
@@ -63,31 +77,24 @@ const MACDChart = ({
 
   const macdChartYStart =
     CANDLE_CHART_HEIGHT + CHART_PADDING * 2 + VOLUME_CHART_HEIGHT;
+
   const zeroLineY = getMacdPixelY(0);
 
-  const macdLinePoints = macdLineValues
-    .map((macd, index) => {
-      if (macd === null) return null;
+  const calcPoints = (lineValues: (number | null)[]) => {
+    return lineValues.reduce((all, macd, index) => {
+      if (macd === null) return all;
 
       const xPosition = index * spacePerCandle + spacePerCandle / 2;
       const yPosition = getMacdPixelY(macd);
 
-      return `${xPosition},${yPosition}`;
-    })
-    .filter((point): point is string => point !== null)
-    .join(" ");
+      all.push(`${xPosition},${yPosition}`);
 
-  const signalLinePoints = signalLineValues
-    .map((signal, index) => {
-      if (signal === null) return null;
+      return all;
+    }, [] as string[]);
+  };
 
-      const xPosition = index * spacePerCandle + spacePerCandle / 2;
-      const yPosition = getMacdPixelY(signal);
-
-      return `${xPosition},${yPosition}`;
-    })
-    .filter((point): point is string => point !== null)
-    .join(" ");
+  const macdLinePoints = calcPoints(macdLineValues);
+  const signalLinePoints = calcPoints(signalLineValues);
 
   return (
     <g transform={`translate(0, ${macdChartYStart})`}>
@@ -134,13 +141,13 @@ const MACDChart = ({
         strokeDasharray="2,2"
       />
       <polyline
-        points={macdLinePoints}
+        points={macdLinePoints.join(" ")}
         fill="none"
         stroke="#00BCD4"
         strokeWidth="1.5"
       />
       <polyline
-        points={signalLinePoints}
+        points={signalLinePoints.join(" ")}
         fill="none"
         stroke="#FF9800"
         strokeWidth="1.5"
@@ -153,7 +160,7 @@ export default MACDChart;
 
 type MACDChartProps = {
   data: [string, ChartDataEntry][];
-  fastPeriod?: number; // Default 12
-  slowPeriod?: number; // Default 26
-  signalPeriod?: number; // Default 9
+  fastPeriod?: number;
+  slowPeriod?: number;
+  signalPeriod?: number;
 };
