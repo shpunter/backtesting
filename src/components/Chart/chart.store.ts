@@ -1,10 +1,12 @@
 import { create } from "zustand";
+import { broadcastSync } from "./middleware";
 
-const useChartStore = create<State & Actions>((set) => {
-  return {
+const useChartStore = create<State & Actions>()(
+  broadcastSync("chart_sync_channel")((set) => ({
     linesMA: [],
+    
     addLineMA: ({ type, period, color }) => {
-      return set((state) => ({
+      set((state) => ({
         linesMA: [
           ...state.linesMA,
           {
@@ -16,13 +18,14 @@ const useChartStore = create<State & Actions>((set) => {
         ],
       }));
     },
+
     resetLinesMA: () => {
-      return set(() => ({
+      set(() => ({
         linesMA: [],
       }));
     },
-  };
-});
+  }))
+);
 
 export default useChartStore;
 

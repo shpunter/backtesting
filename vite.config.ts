@@ -16,7 +16,6 @@ const config: UserConfigFn = ({ mode }: ConfigEnv) => {
   return {
     plugins: [
       devtools(),
-      // Conditionally load file-intensive plugins
       viteTsConfigPaths({
         projects: ['./tsconfig.json'],
       }),

@@ -24,8 +24,8 @@ const ConfigPanel = () => {
     <>
       <div>
         <span>type</span>
-        <select ref={refType}>
-          <option value="wma" label="wma" selected />
+        <select ref={refType} defaultValue="wma">
+          <option value="wma" label="wma" />
           <option value="ema" label="ema" />
           <option value="sma" label="sma" />
         </select>
