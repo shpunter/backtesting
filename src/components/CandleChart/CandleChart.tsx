@@ -1,6 +1,7 @@
 import Candle from "./Candle/Candle";
 import { CANDLE_WIDTH_RATIO, getChartScales } from "../utils";
 import type { ChartDataEntry } from "../type";
+import { memo } from "react";
 
 const CandleChart = ({ data }: CandleChartProps) => {
   const chartWidth = data.length * 10;
@@ -54,7 +55,7 @@ const CandleChart = ({ data }: CandleChartProps) => {
   );
 };
 
-export default CandleChart;
+export default memo(CandleChart);
 
 type CandleChartProps = {
   data: [string, ChartDataEntry][];

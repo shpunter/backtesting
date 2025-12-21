@@ -8,6 +8,7 @@ import {
 } from "../utils";
 
 import type { ChartDataEntry } from "../type";
+import { memo } from "react";
 
 const MACDChart = ({
   data,
@@ -156,7 +157,7 @@ const MACDChart = ({
   );
 };
 
-export default MACDChart;
+export default memo(MACDChart);
 
 type MACDChartProps = {
   data: [string, ChartDataEntry][];

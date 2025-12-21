@@ -6,6 +6,7 @@ import {
 } from "../utils";
 
 import type { ChartDataEntry } from "../type";
+import { memo } from "react";
 
 const VolumeChart = ({ data }: VolumeChartProps) => {
   const numCandles = data.length;
@@ -59,7 +60,7 @@ const VolumeChart = ({ data }: VolumeChartProps) => {
   );
 };
 
-export default VolumeChart;
+export default memo(VolumeChart);
 
 type VolumeChartProps = {
   data: [string, ChartDataEntry][];

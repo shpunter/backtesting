@@ -4,6 +4,7 @@ import EMALine from "./EMALine/EMALine";
 import SMALine from "./SMALine/SMALine";
 import WMALine from "./WMALine/WMALine";
 import type { ChartDataEntry } from "../type";
+import { memo } from "react";
 
 const MAP = {
   sma: SMALine,
@@ -17,7 +18,7 @@ const LineChart = ({ type, data, period, color }: LineChartProps) => {
   return <Component data={data} period={period} color={color} />;
 };
 
-export default LineChart;
+export default memo(LineChart);
 
 type LineChartProps = {
   type: "sma" | "ema" | "wma";
