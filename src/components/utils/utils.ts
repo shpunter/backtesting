@@ -24,13 +24,13 @@ export const getChartScales = (dataEntries: DataEntries) => {
     };
   }
 
-  let priceMin = parseFloat(dataEntries[0][1].low);
-  let priceMax = parseFloat(dataEntries[0][1].high);
+  let priceMin = dataEntries[0][1].low;
+  let priceMax = dataEntries[0][1].high;
 
   for (let i = 0; i < dataEntries.length; i += 1) {
     const [, value] = dataEntries[i];
-    const vh = parseFloat(value.high);
-    const vl = parseFloat(value.low);
+    const vh = value.high;
+    const vl = value.low;
 
     if (vh > priceMax) priceMax = vh;
     if (vl < priceMin) priceMin = vl;

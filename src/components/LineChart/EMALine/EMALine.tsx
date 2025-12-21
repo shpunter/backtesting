@@ -3,7 +3,7 @@ import type { ChartDataEntry } from "@/components/type";
 
 // Exponential Moving Average
 const EMALine = ({ data, period, color }: EMALineProps) => {
-  const closingPrices = data.map(([, value]) => parseFloat(value.close));
+  const closingPrices = data.map(([, value]) => value.close);
   const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;

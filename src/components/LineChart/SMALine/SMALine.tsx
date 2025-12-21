@@ -3,7 +3,7 @@ import type { ChartDataEntry } from "@/components/type";
 
 // Simple Moving Average
 const SMALine = ({ data, period, color }: SMALineProps) => {
-  const closingPrices = data.map(([, value]) => parseFloat(value.close));
+  const closingPrices = data.map(([, value]) => value.close);
   const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;

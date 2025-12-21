@@ -19,7 +19,7 @@ const MACDChart = ({
   const numCandles = data.length;
   const chartWidth = numCandles * 10;
   const spacePerCandle = chartWidth / numCandles;
-  const closingPrices = data.map(([, value]) => parseFloat(value.close));
+  const closingPrices = data.map(([, value]) => value.close);
   const fastEMA = calculateEMA(closingPrices, fastPeriod);
   const slowEMA = calculateEMA(closingPrices, slowPeriod);
 

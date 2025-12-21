@@ -11,7 +11,7 @@ import ConfigPanel from "../ConfigPanel/ConfigPanel";
 const Chart = ({ data }: ChartProps) => {
   const chartWidth = data.length * 10;
   const linesMA = useChartStore(({ linesMA }) => linesMA);
-
+ 
   return (
     <>
       <ConfigPanel />

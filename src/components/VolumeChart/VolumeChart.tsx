@@ -12,9 +12,8 @@ const VolumeChart = ({ data }: VolumeChartProps) => {
   const numCandles = data.length;
   const chartWidth = numCandles * 10;
 
-  const maxVolume = data.reduce((max, [, value]) => {
-    const vol = parseFloat(value.volume);
-    return vol > max ? vol : max;
+  const maxVolume = data.reduce((max, [, { volume }]) => {
+    return volume > max ? volume : max;
   }, 0);
 
   const spacePerCandle = chartWidth / numCandles;
@@ -26,10 +25,7 @@ const VolumeChart = ({ data }: VolumeChartProps) => {
   return (
     <g transform={`translate(0, ${volumeChartYStart})`}>
       {data.map(([date, value], index) => {
-        const open = parseFloat(value.open);
-        const close = parseFloat(value.close);
-        const volume = parseFloat(value.volume);
-
+        const { open, close, volume } = value;
         const height = (volume / maxVolume) * VOLUME_CHART_HEIGHT;
         const color =
           close > open ? "rgba(255, 82, 82, 0.7)" : "rgba(0, 150, 136, 0.7)";

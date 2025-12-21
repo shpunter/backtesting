@@ -16,13 +16,8 @@ const CandleChart = ({ data }: CandleChartProps) => {
   return (
     <>
       {data.map(([date, value], index) => {
-        const open = parseFloat(value.open);
-        const close = parseFloat(value.close);
-        const high = parseFloat(value.high);
-        const low = parseFloat(value.low);
-
+        const {open, close, high, low} = value;
         const type = close > open ? "buy" : "sell";
-
         const xPosition = index * spacePerCandle + gap;
 
         const yHighPixel = getPixelY(high);

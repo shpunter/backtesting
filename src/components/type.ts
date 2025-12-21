@@ -1,9 +1,9 @@
 export type ChartDataEntry = {
-  open: string;
-  close: string;
-  high: string;
-  low: string;
-  volume: string;
+  open: number;
+  close: number;
+  high: number;
+  low: number;
+  volume: number;
 };
 
 export type DataEntries = [string, ChartDataEntry][];
