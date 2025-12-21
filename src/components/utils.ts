@@ -74,29 +74,23 @@ export const calculateEMA = (
   return emaValues;
 };
 
-export const calculateSMA = (
-  prices: number[],
-  period: number,
-): (number | null)[] => {
-  if (prices.length === 0) return [];
+export function calculateSMA(prices: number[], period: number) {
+  const smaValues = [];
+  let windowSum = 0;
 
-  const smaValues: (number | null)[] = [];
-  const numPrices = prices.length;
+  for (let i = 0; i < prices.length; i++) {
+    windowSum += prices[i];
 
-  for (let i = 0; i < numPrices; i += 1) {
     if (i < period - 1) {
       smaValues.push(null);
     } else {
-      const slice = prices.slice(i - period + 1, i + 1);
-      const sum = slice.reduce((acc, price) => acc + price, 0);
-      const sma = sum / period;
-
-      smaValues.push(sma);
+      smaValues.push(windowSum / period);
+      windowSum -= prices[i - period + 1];
     }
   }
-
+  
   return smaValues;
-};
+}
 
 export const calculateWMA = (
   prices: number[],
