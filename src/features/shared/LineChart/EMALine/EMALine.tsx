@@ -1,0 +1,47 @@
+import { calculateEMA, getChartScales } from "@/features/utils";
+import type { ChartDataEntry } from "@/features/type";
+
+// Exponential Moving Average
+const EMALine = ({ data, period, color }: EMALineProps) => {
+  const closingPrices = data.map(([, value]) => value.close);
+  const numCandles = data.length;
+  const chartWidth = numCandles * 10;
+  const spacePerCandle = chartWidth / numCandles;
+  const emaValues = calculateEMA(closingPrices, period);
+
+  const { getPixelY } = getChartScales(data);
+
+  const exponentialMovingAveragePoints = emaValues
+    .map((ema, index) => {
+      if (ema !== null) {
+        const xPosition = index * spacePerCandle + spacePerCandle / 2;
+        const yPosition = getPixelY(ema);
+
+        return `${xPosition},${yPosition}`;
+      }
+      return null;
+    })
+    .filter((point) => point !== null)
+    .join(" ");
+
+  if (exponentialMovingAveragePoints.length === 0) {
+    return null;
+  }
+
+  return (
+    <polyline
+      points={exponentialMovingAveragePoints}
+      fill="none"
+      stroke={color}
+      strokeWidth="1.5"
+    />
+  );
+};
+
+export default EMALine;
+
+export type EMALineProps = {
+  data: [string, ChartDataEntry][];
+  period: number;
+  color: string;
+};

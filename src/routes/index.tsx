@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import json from "./query-stock-mock.json" with { type: "json" };
-import Chart from "@/components/Chart/Chart";
+import Chart from "@/features/Chart/Chart";
 import { createServerFn } from "@tanstack/react-start";
 
 const serverLoader = createServerFn({ method: "GET" })

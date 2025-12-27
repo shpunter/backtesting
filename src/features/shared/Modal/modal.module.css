@@ -1,0 +1,27 @@
+.modal {
+  border: solid 1px #c9c9c9;
+  border-radius: 4px;
+  padding: 0;
+
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+  background-color: white;
+
+  width: 90%;
+  max-width: 600px;
+
+  min-height: 200px;
+  max-height: 85vh;
+}
+
+.modal[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1px);
+}

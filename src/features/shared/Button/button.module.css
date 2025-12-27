@@ -1,0 +1,39 @@
+/* --- Base Button (Your Provided Styles) --- */
+.btn {
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  height: 28px;
+  border-radius: 4px;
+  border: solid 1px #cdcdcd;
+  background-color: #e5e7eb;
+  padding: 4px 10px;
+
+  color: #464646;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  user-select: none;
+
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #dddddd;
+  color: #111827;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
