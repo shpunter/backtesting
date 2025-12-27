@@ -1,8 +1,7 @@
-import { useRef } from "react";
-import type { ChangeEvent } from "react";
-import useChartStore from "../Chart/chart.store";
-import type { LinesMA } from "../Chart/chart.store";
+import { useRef, type ChangeEvent } from "react";
+import useChartStore, { type LinesMA } from "../Chart/chart.store";
 import { useNavigate, useSearch } from "@tanstack/react-router";
+import Modal, { type ModalHandler } from "../shared/Modal/Modal";
 
 const ConfigPanel = () => {
   const addLineMA = useChartStore(({ addLineMA }) => addLineMA);
@@ -31,6 +30,8 @@ const ConfigPanel = () => {
 
     navigate({ search: (prev) => ({ ...prev, period: value }) });
   };
+
+  const ref = useRef<ModalHandler>(null);
 
   return (
     <>
@@ -64,7 +65,23 @@ const ConfigPanel = () => {
         <button type="button" onClick={resetLinesMA}>
           clear
         </button>
+        <button type="button" onClick={() => ref.current?.open()}>
+          open
+        </button>
       </div>
+      <Modal ref={ref}>
+        <Modal.Header>
+          <h2>System Settings</h2>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p>This body is optional. You could omit Header or Footer.</p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <button type="button" onClick={() => ref.current?.close()}>Save</button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
