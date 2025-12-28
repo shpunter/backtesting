@@ -1,7 +1,6 @@
 import { Scripts, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
@@ -15,7 +14,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Backtracking",
       },
     ],
     links: [
@@ -35,7 +34,24 @@ export const Route = createRootRoute({
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+      <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-J6350PJ3Y6"
+        />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: gtag
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-J6350PJ3Y6');
+            `,
+          }}
+        />
+      </head>
+
       <body suppressHydrationWarning={true}>
         {children}
         <TanStackDevtools

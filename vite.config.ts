@@ -28,7 +28,6 @@ const config: UserConfigFn = ({ mode }: ConfigEnv) => {
     server: {
       middlewareMode: false,
       watch: {
-        ignored: ['**/*.ts'],
         disable: isTest,
       },
     },
