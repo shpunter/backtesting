@@ -1,29 +1,23 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import ConfigModal from "./ConfigModal/ConfigModal";
-import type { ChangeEvent } from "react";
+import Select, { type SelectChangeEvent } from "../shared/Select/Select";
 
 const ConfigPanel = () => {
   const { period } = useSearch({ from: "/" });
   const navigate = useNavigate({ from: "/" });
 
-  const selectOnChange = (
-    e: ChangeEvent<HTMLSelectElement & { value: "1d" | "1m" }>,
-  ) => {
-    const { value } = e.currentTarget;
-
-    navigate({ search: (prev) => ({ ...prev, period: value }) });
+  const selectOnChange = (e: SelectChangeEvent<typeof period>) => {
+    navigate({ search: (prev) => ({ ...prev, period: e.target.value }) });
   };
+
   return (
-    <>
-      <div>
-        <span>fake period: </span>
-        <select defaultValue={period} onChange={selectOnChange}>
-          <option value="1d" label="1d"></option>
-          <option value="1m" label="1m"></option>
-        </select>
-      </div>
+    <div>
+      <Select label="Fake period" value={period} onChange={selectOnChange}>
+        <Select.Option value="1d">1 day</Select.Option>
+        <Select.Option value="1m">1 month</Select.Option>
+      </Select>
       <ConfigModal />
-    </>
+    </div>
   );
 };
 

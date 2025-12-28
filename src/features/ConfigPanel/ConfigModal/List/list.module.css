@@ -1,0 +1,10 @@
+.list {
+  display: flex;
+  justify-content: space-between;
+  margin: 14px 0 0 0;
+}
+
+.dividing-line{
+    border-top: solid 1px #d0d0d0;
+    margin: 14px 0;
+}

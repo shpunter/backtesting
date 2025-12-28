@@ -1,4 +1,3 @@
 .add-line {
   display: flex;
-  gap: 14px;
-}
+  justify-content: space-between;}

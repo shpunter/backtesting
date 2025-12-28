@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import useChartStore, { type LinesMA } from "@/features/Chart/chart.store";
+import useChartStore, { type LineMA } from "@/features/Chart/chart.store";
 import Button from "@/features/shared/Button/Button";
 import Input from "@/features/shared/Input/Input";
 import css from "./panel.module.css";
@@ -9,17 +9,15 @@ const Panel = () => {
   const addLineMA = useChartStore(({ addLineMA }) => addLineMA);
   const refPeriod = useRef<HTMLDivElement>(null);
   const refColor = useRef<HTMLDivElement>(null);
-  const refType = useRef<HTMLElement & { value: LinesMA["type"] }>(null);
+  const refType = useRef<HTMLDivElement>(null);
 
   const onClickAddFn = () => {
-    console.log(refType?.current);
-
     if (!refPeriod.current || !refColor.current || !refType.current) return;
 
     const period = refPeriod.current.querySelector("input") as HTMLInputElement;
     const color = refColor.current.querySelector("input") as HTMLInputElement;
     const type = refType.current.querySelector("input") as HTMLInputElement & {
-      value: LinesMA["type"];
+      value: LineMA["type"];
     };
 
     if (!period || !color || !type) return;
@@ -29,6 +27,10 @@ const Panel = () => {
       color: color.value,
       type: type.value,
     });
+
+    color.value = "";
+    type.value = "sma";
+    period.value = "";
   };
 
   return (
@@ -40,7 +42,9 @@ const Panel = () => {
       </Select>
       <Input ref={refPeriod} label="Period" defaultValue="20" />
       <Input ref={refColor} label="Color" defaultValue="red" />
-      <Button onClick={onClickAddFn}>Add</Button>
+      <Button onClick={onClickAddFn} sx={{ width: 90, textTransform: "none" }}>
+        Add
+      </Button>
     </div>
   );
 };

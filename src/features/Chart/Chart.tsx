@@ -20,7 +20,7 @@ const Chart = ({ data }: ChartProps) => {
         height={CHART_HEIGHT}
         viewBox={`0 0 ${chartWidth} ${CHART_HEIGHT}`}
       >
-        {linesMA.map((ma) => (
+        {Object.values(linesMA).map((ma) => (
           <LineChart
             key={ma.uuid}
             type={ma.type}
