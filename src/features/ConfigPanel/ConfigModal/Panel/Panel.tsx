@@ -1,51 +1,47 @@
 import { useRef } from "react";
 import useChartStore, { type LinesMA } from "@/features/Chart/chart.store";
 import Button from "@/features/shared/Button/Button";
+import Input from "@/features/shared/Input/Input";
+import css from "./panel.module.css";
+import Select from "@/features/shared/Select/Select";
 
 const Panel = () => {
   const addLineMA = useChartStore(({ addLineMA }) => addLineMA);
-  const deleteAllLinesMA = useChartStore(
-    ({ deleteAllLinesMA }) => deleteAllLinesMA,
-  );
-
-  const refPeriod = useRef<HTMLInputElement>(null);
-  const refColor = useRef<HTMLInputElement>(null);
-  const refType = useRef<HTMLSelectElement & { value: LinesMA["type"] }>(null);
+  const refPeriod = useRef<HTMLDivElement>(null);
+  const refColor = useRef<HTMLDivElement>(null);
+  const refType = useRef<HTMLElement & { value: LinesMA["type"] }>(null);
 
   const onClickAddFn = () => {
+    console.log(refType?.current);
+
     if (!refPeriod.current || !refColor.current || !refType.current) return;
 
+    const period = refPeriod.current.querySelector("input") as HTMLInputElement;
+    const color = refColor.current.querySelector("input") as HTMLInputElement;
+    const type = refType.current.querySelector("input") as HTMLInputElement & {
+      value: LinesMA["type"];
+    };
+
+    if (!period || !color || !type) return;
+
     addLineMA({
-      period: +refPeriod.current?.value,
-      color: refColor.current.value,
-      type: refType.current.value,
+      period: +period.value,
+      color: color.value,
+      type: type.value,
     });
   };
 
   return (
-    <>
-      <div>
-        <span>type: </span>
-        <select ref={refType} defaultValue="sma">
-          <option value="wma" label="wma" />
-          <option value="ema" label="ema" />
-          <option value="sma" label="sma" />
-        </select>
-      </div>
-      <div>
-        <span>period: </span>
-        <input ref={refPeriod} />
-      </div>
-      <div>
-        <span>color: </span>
-        <input ref={refColor} />
-      </div>
-      <div>
-        <Button onClick={onClickAddFn}>add</Button>
-        <Button onClick={deleteAllLinesMA}>delete all</Button>
-        <Button>Save Changes</Button>
-      </div>
-    </>
+    <div className={css["add-line"]}>
+      <Select ref={refType} label="Type" defaultValue="sma">
+        <Select.Option value="wma">WMA</Select.Option>
+        <Select.Option value="ema">EMA</Select.Option>
+        <Select.Option value="sma">SMA</Select.Option>
+      </Select>
+      <Input ref={refPeriod} label="Period" defaultValue="20" />
+      <Input ref={refColor} label="Color" defaultValue="red" />
+      <Button onClick={onClickAddFn}>Add</Button>
+    </div>
   );
 };
 

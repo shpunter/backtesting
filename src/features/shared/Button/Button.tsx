@@ -1,24 +1,17 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-import css from "./button.module.css";
+import ButtonMUI from "@mui/material/Button";
+import type { ReactNode } from "react";
+import type { ButtonProps as MuiButtonProps } from "@mui/material";
 
-const Button: React.FC<ButtonProps> = ({
-  children,
-  variant = "",
-  className = "",
-  ...props
-}) => {
+const Button = ({ children, ...props }: ButtonProps) => {
   return (
-    <button className={`${css.btn} ${css[variant]} ${className}`} {...props}>
+    <ButtonMUI sx={{ textTransform: "none" }} variant="contained" {...props}>
       {children}
-    </button>
+    </ButtonMUI>
   );
 };
 
 export default Button;
 
-type ButtonVariant = "primary" | "danger" | "warning" | "link";
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
+type ButtonProps = MuiButtonProps & {
   children: ReactNode;
-}
+};

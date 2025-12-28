@@ -34,7 +34,24 @@ export const Route = createRootRoute({
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+      <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-J6350PJ3Y6"
+        />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: gtag
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-J6350PJ3Y6');
+            `,
+          }}
+        />
+      </head>
+
       <body suppressHydrationWarning={true}>
         {children}
         <TanStackDevtools
