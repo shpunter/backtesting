@@ -1,37 +1,47 @@
 import { createFileRoute } from "@tanstack/react-router";
-import json from "./query-stock-mock.json" with { type: "json" };
+import tsla from "./TSLA.json" with { type: "json" };
+import nsdq from "./NSDQ.json" with { type: "json" };
+import nvda from "./NVDA.json" with { type: "json" };
 import Chart from "@/features/Chart/Chart";
 import { createServerFn } from "@tanstack/react-start";
 
 const serverLoader = createServerFn({ method: "GET" })
-  .inputValidator((data: PeriodSearch) => ({ period: data.period }))
+  .inputValidator((data: SearchParams) => ({
+    period: data.period,
+    stock: data.stock,
+  }))
   .handler(async (ctx) => {
-    if (ctx.data.period === "1m") {
-      return { data: Object.fromEntries(Object.entries(json).slice(100, 200)) };
-    }
+    if (ctx.data.stock === "nsdq") return { data: nsdq };
+    if (ctx.data.stock === "tsla") return { data: tsla };
+    if (ctx.data.stock === "nvda") return { data: nvda };
 
     return {
-      data: json,
+      data: nsdq,
     };
   });
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
-  validateSearch: (search: Record<string, unknown>): PeriodSearch => {
-    if (search?.period && ["1d", "1m"].includes(search.period as string)) {
-      return {
-        period: search.period,
-      } as PeriodSearch;
+  validateSearch: (search: Record<string, unknown>): SearchParams => {
+    let res: SearchParams = {
+      period: "1y",
+      stock: "nsdq",
+    };
+
+    if (search?.period && ["1y"].includes(search.period as string)) {
+      res = Object.assign(res, { period: search.period });
     }
 
-    return {
-      period: "1d",
-    };
+    if (search?.stock && ["nsdq", "tsla", "nvda"].includes(search.stock as string)) {
+      res = Object.assign(res, { stock: search.stock });
+    }
+
+    return res;
   },
-  loaderDeps: ({ search }) => ({ period: search.period }),
+  loaderDeps: ({ search }) => ({ period: search.period, stock: search.stock }),
   loader: ({ deps }) => {
     return serverLoader({
-      data: { period: deps.period },
+      data: { period: deps.period, stock: deps.stock },
     });
   },
 });
@@ -42,6 +52,7 @@ function RouteComponent() {
   return <Chart data={Object.entries(resp.data)} />;
 }
 
-type PeriodSearch = {
-  period: "1d" | "1m";
+type SearchParams = {
+  period: "1y";
+  stock: "nsdq" | "tsla" | "nvda";
 };
