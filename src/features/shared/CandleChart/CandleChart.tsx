@@ -17,7 +17,7 @@ const CandleChart = ({ data }: CandleChartProps) => {
     <>
       {data.map(([date, value], index) => {
         const {open, close, high, low} = value;
-        const type = close > open ? "buy" : "sell";
+        const type = close >= open ? "buy" : "sell";
         const xPosition = index * spacePerCandle + gap;
 
         const yHighPixel = getPixelY(high);
@@ -26,7 +26,7 @@ const CandleChart = ({ data }: CandleChartProps) => {
         const yClosePixel = getPixelY(close);
 
         const yBodyTop = Math.min(yOpenPixel, yClosePixel);
-        const heightBody = Math.abs(yOpenPixel - yClosePixel);
+        const heightBody = Math.max(1, Math.abs(yOpenPixel - yClosePixel));
 
         const yWickMax = yHighPixel;
         const yWickMin = yLowPixel;
