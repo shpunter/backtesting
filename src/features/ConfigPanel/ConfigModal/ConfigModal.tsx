@@ -1,9 +1,9 @@
-import Modal, { type ModalHandler } from "@/features/shared/Modal/Modal";
+import Modal, { type ModalHandler } from "@/shared/Modal/Modal";
 import css from "./configModal.module.css";
 import { useRef } from "react";
-import CloseButton from "@/features/shared/CloseButton/CloseButton";
+import CloseButton from "@/shared/CloseButton/CloseButton";
 import Panel from "./Panel/Panel";
-import Button from "@/features/shared/Button/Button";
+import Button from "@/shared/Button/Button";
 import useChartStore from "@/features/Chart/chart.store";
 import List from "./List/List";
 

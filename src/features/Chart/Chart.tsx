@@ -1,12 +1,12 @@
-import VolumeChart from "../shared/VolumeChart/VolumeChart";
+import VolumeChart from "../../shared/VolumeChart/VolumeChart";
 import useChartStore from "./chart.store";
 import { CHART_HEIGHT } from "../utils";
 
 import type { ChartDataEntry } from "../type";
 import ConfigPanel from "../ConfigPanel/ConfigPanel";
-import LineChart from "../shared/LineChart/LineChart";
-import CandleChart from "../shared/CandleChart/CandleChart";
-import MACDChart from "../shared/MACDChart/MACDChart";
+import LineChart from "../../shared/LineChart/LineChart";
+import CandleChart from "../../shared/CandleChart/CandleChart";
+import MACDChart from "../../shared/MACDChart/MACDChart";
 
 const Chart = ({ data }: ChartProps) => {
   const chartWidth = data.length * 10;

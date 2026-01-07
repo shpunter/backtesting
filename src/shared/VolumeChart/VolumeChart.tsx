@@ -4,8 +4,8 @@ import {
   CANDLE_WIDTH_RATIO,
   CHART_PADDING,
   VOLUME_CHART_HEIGHT,
-} from "../../utils";
-import { ChartDataEntry } from "../../type";
+} from "../../features/utils";
+import { ChartDataEntry } from "../../features/type";
 
 const VolumeChart = ({ data }: VolumeChartProps) => {
   const numCandles = data.length;

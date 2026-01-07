@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import useChartStore, { type LineMA } from "@/features/Chart/chart.store";
-import Button from "@/features/shared/Button/Button";
-import Input from "@/features/shared/Input/Input";
+import Button from "@/shared/Button/Button";
+import Input from "@/shared/Input/Input";
 import css from "./panel.module.css";
-import Select from "@/features/shared/Select/Select";
+import Select from "@/shared/Select/Select";
 
 const Panel = () => {
   const addLineMA = useChartStore(({ addLineMA }) => addLineMA);

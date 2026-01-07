@@ -1,6 +1,6 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import ConfigModal from "./ConfigModal/ConfigModal";
-import Select, { type SelectChangeEvent } from "../shared/Select/Select";
+import Select, { type SelectChangeEvent } from "../../shared/Select/Select";
 
 const ConfigPanel = () => {
   const { period, stock } = useSearch({ from: "/" });

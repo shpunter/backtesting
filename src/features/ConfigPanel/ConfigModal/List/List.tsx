@@ -1,7 +1,7 @@
 import useChartStore from "@/features/Chart/chart.store";
-import Button from "@/features/shared/Button/Button";
-import Input from "@/features/shared/Input/Input";
-import Select from "@/features/shared/Select/Select";
+import Button from "@/shared/Button/Button";
+import Input from "@/shared/Input/Input";
+import Select from "@/shared/Select/Select";
 import css from "./list.module.css";
 
 const List = () => {
