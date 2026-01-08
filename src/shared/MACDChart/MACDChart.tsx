@@ -9,6 +9,14 @@ import {
 } from "@/features/utils";
 import { memo } from "react";
 
+const FULL_CHART_HEIGHT =
+  CANDLE_CHART_HEIGHT +
+  CHART_PADDING * 2 +
+  VOLUME_CHART_HEIGHT +
+  MACD_CHART_HEIGHT;
+
+const BAR_WIDTH = 10;
+
 const MACDChart = ({
   data,
   fastPeriod = 12,
@@ -16,7 +24,7 @@ const MACDChart = ({
   signalPeriod = 9,
 }: MACDChartProps) => {
   const numCandles = data.length;
-  const chartWidth = numCandles * 10;
+  const chartWidth = numCandles * BAR_WIDTH;
   const spacePerCandle = chartWidth / numCandles;
   const closingPrices = data.map(([, value]) => value.close);
   const fastEMA = calculateEMA(closingPrices, fastPeriod);
@@ -100,13 +108,10 @@ const MACDChart = ({
     <g transform={`translate(0, ${macdChartYStart})`}>
       {histogramValues.map((hist, index) => {
         if (hist === null) return null;
-
         const candleWidth = spacePerCandle * CANDLE_WIDTH_RATIO;
         const gap = (spacePerCandle - candleWidth) / 2;
-
-        const color = hist > 0 ? "#00B0FF" : "#FF5252";
         const xPosition = index * spacePerCandle + gap;
-
+        const color = hist > 0 ? "#00B0FF" : "#FF5252";
         const height = Math.abs(getMacdPixelY(hist) - zeroLineY);
 
         let yPosition = zeroLineY;
@@ -116,18 +121,26 @@ const MACDChart = ({
           yPosition = zeroLineY;
         }
 
-        const key = `hist-${index}`;
+        const key = `${xPosition}-${yPosition}`;
 
         return (
-          <rect
-            key={key}
-            x={xPosition}
-            y={yPosition}
-            width={candleWidth}
-            height={height}
-            fill={color}
-            opacity="0.7"
-          />
+          <g key={`${key}`}>
+            <rect
+              x={xPosition - gap}
+              y={-macdChartYStart}
+              width={candleWidth + 2 * gap}
+              height={FULL_CHART_HEIGHT}
+              fill={hist > 0 ? "#d7fbdb" : "#fbd7d7"}
+            />
+
+            <rect
+              x={xPosition}
+              y={yPosition}
+              width={candleWidth}
+              height={height}
+              fill={color}
+            />
+          </g>
         );
       })}
 
