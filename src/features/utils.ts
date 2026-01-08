@@ -74,7 +74,7 @@ export const calculateEMA = (
   return emaValues;
 };
 
-export function calculateSMA(prices: number[], period: number) {
+export const calculateSMA = (prices: number[], period: number) => {
   const smaValues = [];
   let windowSum = 0;
 

@@ -20,6 +20,7 @@ const Chart = ({ data }: ChartProps) => {
         height={CHART_HEIGHT}
         viewBox={`0 0 ${chartWidth} ${CHART_HEIGHT}`}
       >
+        <MACDChart data={data} />
         {Object.values(linesMA).map((ma) => (
           <LineChart
             key={ma.uuid}
@@ -29,10 +30,8 @@ const Chart = ({ data }: ChartProps) => {
             color={ma.color}
           />
         ))}
-
         <CandleChart data={data} />
         <VolumeChart data={data} />
-        <MACDChart data={data} />
       </svg>
     </>
   );
